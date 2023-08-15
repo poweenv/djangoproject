@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block contents %}
+<h3 class="my-3 border-bottom pb-2">후기 작성</h3>
+{% include 'errors.html' %}
+<form method="post" class="my-3" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group mb-3">
+        <label for="title">후기 제목</label>
+        <input type="text" name="title" id="title" class="form-control" value="{{form.title.value|default_if_none:''}}">
+    </div>
+    <div class="form-group mb-3">
+        <label for="report">내용</label>
+        <input type="text" name="report" id="report" class="form-control" value="{{form.report.value|default_if_none:''}}">
+    </div>
+    <div class="form-group mb-3">
+        <label for="img">사진</label>
+        <input type="file" name="img" id="img" class="form-control">
+    </div>
+    <input type="submit" value="후기등록" class="btn btn-success">
+</form>
+{% endblock contents %}

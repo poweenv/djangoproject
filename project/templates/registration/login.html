@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% block style %}
+<style>
+  #google {
+    background-color: #4285f4;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #naver {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0.375rem 0.75rem;
+    border-width: 0;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    color: #fff;
+    background-color: #1ec800;
+  }
+</style>
+{% endblock style %} {% block content %}
+<h3 class="text-dark">로그인</h3>
+<form method="post" action="{% url 'login' %}" class="mt-3">
+  {% csrf_token %} {{form.as_p}}
+  <button type="submit" class="btn btn-primary" id="google">로그인</button>
+  <button type="submit" class="btn btn-primary" id="naver">로그인</button>
+  <a href="{% url 'password_reset' %}">비밀번호 찾기</a>
+</form>
+{% endblock content %}

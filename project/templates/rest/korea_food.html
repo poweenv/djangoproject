@@ -1,0 +1,106 @@
+{% extends 'base.html' %} {% load static %} 
+{% load custom_filters %}
+{% block style %}
+<style>
+  .fixed-height {
+    height: 300px;
+    min-height: 200ps;
+    overflow: hidden;
+  }
+  .fixed-width {
+    width: 100%;
+  }
+  .card-container {
+    margin-bottom: 150px;
+  }
+  .pagination-container{
+    display: flex;
+    justify-content: center;
+  }
+</style>
+{% endblock style %} {% block contents %}
+
+<body>
+  <h1>착한 가격 업소</h1>
+  <div class="container">
+    <div class="row my-3">
+        <div class="col-md-6">
+            <div class="dropdown">
+
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">카테고리</button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="?category=001&page=1">한식</a></li>
+                    <li><a class="dropdown-item" href="?category=002&page=1">중식</a></li>
+                    <li><a class="dropdown-item" href="?category=003&page=1">양식</a></li>
+                    <li><a class="dropdown-item" href="?category=004&page=1">카페/페스트푸드</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form action="/rest/korea_food" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="{{query}}" placeholder="검색어 입력">
+                    <input type="submit" value="검색">
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+  <div class="row card-container">
+    {% for item in items %} {% if item.SH_PRIDE %}
+    <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+      <div class="card fixed-width">
+        <div class="card-body fixed-height">
+            {% comment %}  {% endcomment %}
+          <h5 class="card-title"><a href="{% url 'food:food_detail' item.SH_ID %}">{{item.SH_NAME}}</a></h5>
+          <p class="card-text">{{item.SH_ADDR}}</p>
+          <p class="card-text"> 👍 {{item.SH_RCMN|to_int}}</p>
+          <p class="card-text">{{item.SH_PRIDE}}</p>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <p>목록이 없습니다.</p>
+    {% endif %}
+    {% endfor %}
+
+    <div class="pagination-container text-center mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1&search={{query}}">&laquo;first</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{query}}">이전</a>
+                </li>
+                {% endif %}
+                {% for i in page_obj.paginator.page_range %}
+                {% if i >= page_obj.number|add:-5 and i <= page_obj.number|add:5 %}
+                    {% if page_obj.number == i %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ i }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ page_obj.next_page_number }}&search={{ query }}">next</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ page_obj.paginator.num_pages }}&search={{ query }}">&raquo;last</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</body>
+{% endblock contents %} {% block script %}
+{% endblock script %}
